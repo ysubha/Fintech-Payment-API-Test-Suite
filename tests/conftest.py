@@ -10,6 +10,8 @@ def pay_engine():
 def reset_engine():
     from utils.app import pay_engine
     pay_engine._users.clear()
+    pay_engine._transactionNo = 1
+    pay_engine._transactions.clear()
 
 
 @pytest.fixture(scope = 'function')
