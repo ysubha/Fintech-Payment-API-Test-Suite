@@ -6,10 +6,15 @@ class PaymentEngine:
     def __init__(self):
         self._users = {}
         self._transactions = []
-        self._transactionNo = 0
+        self._transaction_no = 0
 
     # _users list/table->  amount
     # _transactions list/table->  transaction_id | user_id | amount | type(PAYMENT | REFUND) | status(SUCCESS | FAILED)| timestamp
+
+    def reset(self):
+        self._users.clear()
+        self._transaction_no = 0
+        self._transactions.clear()
 
     def _failed_status_msg(self, reason):
         return {
@@ -18,15 +23,17 @@ class PaymentEngine:
         }
 
     def _success_status_msg(self, balance, transaction_id=None):
-        return {
+        request_json = {
             'status': 'SUCCESS',
             'balance': balance,
-            'txn_id' : transaction_id
         }
+        if transaction_id:
+            request_json['txn_id'] = transaction_id
+        return request_json
 
     def _record_transaction(self, user_id: str, amount: float, txn_type: str, pay_txn_id=None):
-        self._transactionNo += 1
-        transaction_num = 'TXN_' + str(self._transactionNo)
+        self._transaction_no += 1
+        transaction_num = 'TXN_' + str(self._transaction_no)
         transaction = {
             'txn_id': transaction_num,
             'user_id': user_id,
@@ -67,14 +74,13 @@ class PaymentEngine:
     def get_user_transactions(self, user_id: str):
         return [transaction for transaction in self._transactions if transaction['user_id'] == user_id]
 
-    def check_transactions_id_exists(self, user_id: str, transaction_id: str):
+    def get_transaction_types_for_id(self, user_id: str, transaction_id: str):
         transactions_list = list(transaction for transaction in self._transactions if transaction['user_id'] == user_id)
         return [transaction['type'] for transaction in transactions_list if transaction['txn_id'] == transaction_id]
 
-    def check_if_payment_already_refunded(self, transactions_type_list):
-        for txn_type in transactions_type_list:
-            if txn_type == 'REFUND':
-                return True
+    def check_if_payment_already_refunded(self, payment_txn_id: str):
+        if payment_txn_id is not None and payment_txn_id != 'REFUND':
+            return True
         return False
 
     def process_payment(self, user_id, amount):
@@ -92,14 +98,14 @@ class PaymentEngine:
 
     def refund_payment(self, user_id: str, amount: float | str | int, payment_txn_id: str):
         amount = self.convert_amount(amount)
-        transactions = self.check_transactions_id_exists(user_id, payment_txn_id)
+        transactions = self.get_transaction_types_for_id(user_id, payment_txn_id)
         if amount is None or amount <= 0.00:
             return self._failed_status_msg('INVALID_AMOUNT')
         elif not self.check_user_exists(user_id):
             return self._failed_status_msg('USER_NOT_FOUND')
-        elif transactions is None:
+        elif not transactions:
             return self._failed_status_msg('INVALID_TRANSACTION_ID')
-        elif self.check_if_payment_already_refunded(transactions):
+        elif self.check_if_payment_already_refunded(payment_txn_id):
             return self._failed_status_msg('PAYMENT_REFUND_COMPLETED')
         else:
             self._users[user_id] += amount
