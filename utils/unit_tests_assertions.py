@@ -14,18 +14,20 @@ def assert_current_balance(pay_engine, user_id, net_balance):
 
 
 def assert_payment_process_successfully(pay_engine, user_id, amount, net_balance):
-    success_response, transaction_id = pay_engine.process_payment(user_id, amount)
+    success_response = pay_engine.process_payment(user_id, amount)
     assert success_response['status'] == 'SUCCESS'
     expected_balance = pytest.approx(net_balance)
     assert success_response['balance'] == expected_balance
 
     assert_current_balance(pay_engine, user_id, net_balance)
-    return transaction_id
+    return success_response['txn_id']
+
 
 def assert_payment_process_failure(pay_engine, user_id, amount, reject_reason):
-    failure_response = pay_engine.process_payment(user_id, amount)[0]
+    failure_response = pay_engine.process_payment(user_id, amount)
     assert failure_response['status'] == 'FAILED'
     assert failure_response['reason'] == reject_reason
+
 
 def assert_refund_process_successfully(pay_engine, user_id, amount, net_balance, payment_txn_id):
     response = pay_engine.refund_payment(user_id, amount, payment_txn_id)
