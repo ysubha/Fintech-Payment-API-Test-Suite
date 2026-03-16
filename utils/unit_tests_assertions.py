@@ -22,6 +22,10 @@ def assert_payment_process_successfully(pay_engine, user_id, amount, net_balance
     assert_current_balance(pay_engine, user_id, net_balance)
     return transaction_id
 
+def assert_payment_process_failure(pay_engine, user_id, amount, reject_reason):
+    failure_response = pay_engine.process_payment(user_id, amount)[0]
+    assert failure_response['status'] == 'FAILED'
+    assert failure_response['reason'] == reject_reason
 
 def assert_refund_process_successfully(pay_engine, user_id, amount, net_balance, payment_txn_id):
     response = pay_engine.refund_payment(user_id, amount, payment_txn_id)
