@@ -17,10 +17,11 @@ class PaymentEngine:
             'reason': reason
         }
 
-    def _success_status_msg(self, balance):
+    def _success_status_msg(self, balance, transaction_id=None):
         return {
             'status': 'SUCCESS',
-            'balance': balance
+            'balance': balance,
+            'txn_id' : transaction_id
         }
 
     def _record_transaction(self, user_id: str, amount: float, txn_type: str, pay_txn_id=None):
@@ -79,15 +80,15 @@ class PaymentEngine:
     def process_payment(self, user_id, amount):
         amount = self.convert_amount(amount)
         if amount is None or amount <= 0.00:
-            return self._failed_status_msg('INVALID_AMOUNT'), None
+            return self._failed_status_msg('INVALID_AMOUNT')
         elif not self.check_user_exists(user_id):
-            return self._failed_status_msg('USER_NOT_FOUND'), None
+            return self._failed_status_msg('USER_NOT_FOUND')
         elif amount > self._users[user_id]:
-            return self._failed_status_msg('INSUFFICIENT_FUNDS'), None
+            return self._failed_status_msg('INSUFFICIENT_FUNDS')
         else:
             self._users[user_id] -= amount
             transaction_id = self._record_transaction(user_id, amount, 'PAYMENT', None)
-            return self._success_status_msg(self._users[user_id]), transaction_id
+            return self._success_status_msg(self._users[user_id], transaction_id)
 
     def refund_payment(self, user_id: str, amount: float | str | int, payment_txn_id: str):
         amount = self.convert_amount(amount)
