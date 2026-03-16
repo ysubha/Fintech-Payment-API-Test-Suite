@@ -1,4 +1,4 @@
-from utils.unit_tests_assertions import *
+from utils.unit_tests_assertions import assert_create_user_successfully, assert_current_balance
 
 
 def test_get_balance_successfully(pay_engine):

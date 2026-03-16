@@ -1,4 +1,7 @@
-from utils.unit_tests_assertions import *
+import pytest
+
+from utils.unit_tests_assertions import assert_create_user_successfully, assert_payment_process_successfully, \
+    assert_refund_process_successfully, assert_refund_process_failure, assert_current_balance
 
 USER_ID = "User001"
 INITIAL_BALANCE = 1000.0
