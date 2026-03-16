@@ -45,6 +45,9 @@ def get_balance(user_id):
     else:
         return jsonify(balance_json_data), 200
 
+@api.route('/users/<string:user_id>/transactions', methods = ['GET'])
+def get_user_transactions(user_id):
+    return pay_engine.get_user_transactions(user_id)
 
 @api.route('/refunds', methods=['POST'])
 def refund_payment():
