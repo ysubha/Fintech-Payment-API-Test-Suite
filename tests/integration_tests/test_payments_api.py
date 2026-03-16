@@ -1,4 +1,7 @@
-from utils.assertions import *
+import pytest
+
+from utils.integration_tests_assertions import assert_user_creation_success, assert_successful_payment_response, \
+    assert_failed_payment_response
 
 USER_ID = 'User001'
 INITIAL_BALANCE = 1000
@@ -7,7 +10,7 @@ PAYMENT_AMOUNT = 500
 
 @pytest.mark.parametrize('payment_amount', [250, 1000])
 def test_process_payment_success(server_client, create_user, payment_amount):
-    assert create_user.status_code == 200
+    assert_user_creation_success(create_user)
 
     payment_json = {
         'user_id': USER_ID,
