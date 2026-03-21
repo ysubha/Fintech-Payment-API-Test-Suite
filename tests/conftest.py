@@ -1,5 +1,6 @@
 import pytest
 from services.payment_engine import PaymentEngine
+from tests.constants import DEFAULT_USER_ID, DEFAULT_INITIAL_BALANCE
 from utils.app import api
 
 
@@ -24,7 +25,9 @@ def server_client():
 def create_user(server_client):
     url = '/users'
     user_json = {
-        'user_id': 'User001',
-        'amount': 1000
+        'user_id': DEFAULT_USER_ID,
+        'amount': DEFAULT_INITIAL_BALANCE
     }
-    return server_client.post(url, json=user_json)
+    response = server_client.post(url, json=user_json)
+    assert response.status_code == 200, f'user creation failed: {response.get_json()}'
+    return response

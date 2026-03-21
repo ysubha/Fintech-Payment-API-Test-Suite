@@ -79,9 +79,10 @@ class PaymentEngine:
         return [transaction['type'] for transaction in transactions_list if transaction['txn_id'] == transaction_id]
 
     def check_if_payment_already_refunded(self, payment_txn_id: str):
-        if payment_txn_id is not None and payment_txn_id != 'REFUND':
-            return True
-        return False
+        return any(
+            t['payment_txn_id'] == payment_txn_id and t['type'] == 'REFUND'
+            for t in self._transactions
+        )
 
     def process_payment(self, user_id, amount):
         amount = self.convert_amount(amount)
