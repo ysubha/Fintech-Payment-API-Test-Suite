@@ -1,4 +1,4 @@
-from utils.assertions import *
+from utils.integration_tests_assertions import *
 
 
 def test_create_user_success(server_client, create_user):

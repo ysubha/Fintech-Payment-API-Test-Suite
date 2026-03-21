@@ -1,8 +1,10 @@
 import pytest
 
+
 def assert_user_creation_success(response):
     assert response.status_code == 200
     assert response.get_json()['status'] == 'SUCCESS'
+
 
 def assert_user_creation_failure(response):
     assert response.status_code == 400
@@ -25,6 +27,7 @@ def assert_successful_payment_response(server_client, payment_json, balance, use
     assert payment_response_json['balance'] == pytest.approx(balance)
 
     assert_balance(server_client, balance, user_id)
+    return payment_response_json['txn_id']
 
 
 def assert_failed_payment_response(server_client, payment_json, reason, balance, user_id):
@@ -43,7 +46,7 @@ def assert_successful_refund_response(server_client, refund_json, net_balance, u
     refund_data = refund_response.get_json()
     assert refund_data['status'] == 'SUCCESS'
     assert refund_data['balance'] == pytest.approx(net_balance)
-
+    print(refund_data['balance'],pytest.approx(net_balance))
     assert_balance(server_client, net_balance, user_id)
 
 

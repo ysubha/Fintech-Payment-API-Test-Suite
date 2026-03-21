@@ -1,4 +1,2 @@
-user_dict = {
-'user_id': 'User001',
-'amount': 1000
-}
+DEFAULT_USER_ID = 'User001'
+DEFAULT_INITIAL_BALANCE = 1000.0
