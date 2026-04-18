@@ -5,7 +5,7 @@ initiation, validation, status, and error handling.
 
 ## Stack
 - Python, pytest, requests
-- PostgreSQL (transaction state validation)
+- MySQL (transaction state validation)
 - Page Object Model structure
 
 ## Structure
