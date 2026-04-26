@@ -2,6 +2,9 @@ import mysql.connector
 
 from utils.helper import get_properties
 
+def reset_db():
+    db_execution("DELETE FROM " + get_properties('SQL', 'TRANSACTIONS_TABLE'))
+    db_execution("DELETE FROM " + get_properties('SQL', 'USER_TABLE'))
 
 def db_execution(query, values=None):
     db_connect = {
@@ -12,8 +15,6 @@ def db_execution(query, values=None):
     }
     db_connection = mysql.connector.connect(**db_connect)
     cursor = db_connection.cursor()
-    cursor.execute("DELETE FROM " + get_properties('SQL', 'USER_TABLE'))
-    cursor.execute("DELETE FROM " + get_properties('SQL', 'TRANSACTIONS_TABLE'))
     if values:
         cursor.execute(query, values)
     else:

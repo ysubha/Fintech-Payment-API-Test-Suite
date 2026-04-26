@@ -4,7 +4,7 @@ import random
 import pytest
 from playwright.sync_api import sync_playwright
 
-from tests.constants import DEFAULT_USER_ID, DEFAULT_INITIAL_BALANCE
+from tests.constants import DEFAULT_INITIAL_BALANCE
 from utils.helper import get_properties
 
 
