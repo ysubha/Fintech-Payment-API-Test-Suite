@@ -20,27 +20,27 @@ def test_user_creation_missing_user_id_failure(server_client):
     assert_user_creation_failure(response)
 
 
-def test_user_creation_missing_amount_failure(server_client):
+def test_user_creation_missing_amount_failure(server_client, fake):
     user_json = {
-        'user_id': 'User001'
+        'user_id': fake.user_name()
     }
     response = server_client.post('/users', json=user_json)
     assert_user_creation_failure(response)
 
 
 @pytest.mark.parametrize('amount', [-200, None, 'abc'])
-def test_user_creation_invalid_amount_failure(server_client, amount):
+def test_user_creation_invalid_amount_failure(server_client, fake, amount):
     user_json = {
-        'user_id': 'User001',
+        'user_id': fake.user_name(),
         'amount': amount
     }
     response = server_client.post('/users', json=user_json)
     assert_user_creation_failure(response)
 
 
-def test_duplicate_user_creation_failure(server_client):
+def test_duplicate_user_creation_failure(server_client, fake):
     user_json = {
-        'user_id': 'User001',
+        'user_id': fake.user_name(),
         'amount': 1000
     }
     response = server_client.post('/users', json=user_json)

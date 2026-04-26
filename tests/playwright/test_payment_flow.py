@@ -7,13 +7,13 @@ from playwright.sync_api import sync_playwright
 from tests.constants import DEFAULT_INITIAL_BALANCE
 from utils.helper import get_properties
 
-
-def test_e2e_payment_flow():
+@pytest.mark.e2e
+def test_e2e_payment_flow(fake):
     with sync_playwright() as playwright:
         base_url = get_properties('API', 'base_url')
         request = playwright.request.new_context(base_url=base_url)
 
-        user_id = f"User_{random.random()}"
+        user_id = fake.user_name()
         user = {
             'user_id': user_id,
             'amount': DEFAULT_INITIAL_BALANCE

@@ -1,4 +1,5 @@
 import pytest
+from faker.proxy import Faker
 from services.payment_engine import PaymentEngine
 from tests.constants import DEFAULT_USER_ID, DEFAULT_INITIAL_BALANCE
 from utils.app import api
@@ -7,6 +8,12 @@ from utils.app import api
 @pytest.fixture
 def pay_engine():
     return PaymentEngine()
+
+
+@pytest.fixture()
+def fake():
+    fake = Faker()
+    return fake
 
 
 @pytest.fixture(autouse=True)
