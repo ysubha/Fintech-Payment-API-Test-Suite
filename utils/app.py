@@ -4,6 +4,9 @@ from services.payment_engine import PaymentEngine
 api = Flask(__name__)
 pay_engine = PaymentEngine()
 
+if __name__ == '__main__':
+    api.run(port=5000, debug=True)
+
 
 @api.route('/users', methods=['POST'])
 def create_user():

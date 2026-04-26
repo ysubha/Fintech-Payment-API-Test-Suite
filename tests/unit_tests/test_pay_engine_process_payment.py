@@ -11,10 +11,10 @@ AMOUNT = 200
 
 
 # Also Covers Exact balance payment
-@pytest.mark.parametrize('balance', ['500', 500, 0])
+@pytest.mark.parametrize('balance', [500, INITIAL_BALANCE])
 def test_process_payment_success(pay_engine, balance):
     assert_create_user_successfully(pay_engine, USER_ID, INITIAL_BALANCE)
-    assert_payment_process_successfully(pay_engine, USER_ID, AMOUNT, INITIAL_BALANCE - AMOUNT)
+    assert_payment_process_successfully(pay_engine, USER_ID, balance, INITIAL_BALANCE - balance)
 
 
 # Covers Negative/Zero + Invalid payments

@@ -1,4 +1,5 @@
-from utils.integration_tests_assertions import *
+import pytest
+from utils.integration_tests_assertions import assert_user_creation_success, assert_user_creation_failure
 
 
 def test_create_user_success(server_client, create_user):

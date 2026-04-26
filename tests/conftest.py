@@ -12,7 +12,13 @@ def pay_engine():
 @pytest.fixture(autouse=True)
 def reset_engine():
     from utils.app import pay_engine
+    from services.db import reset_db
     pay_engine.reset()
+    try:
+        reset_db()
+    except Exception:
+        pass
+    yield
 
 
 @pytest.fixture(scope='function')

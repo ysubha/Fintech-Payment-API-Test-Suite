@@ -1,5 +1,7 @@
 import datetime
 
+from services.db import create_user_in_db, insert_transaction_in_db
+
 
 class PaymentEngine:
 
@@ -44,7 +46,7 @@ class PaymentEngine:
             'timestamp': datetime.datetime.utcnow().isoformat()
         }
         self._transactions.append(transaction)
-        return transaction['txn_id']
+        return transaction
 
     def convert_amount(self, amount):
         try:
@@ -63,6 +65,10 @@ class PaymentEngine:
             return self._failed_status_msg('INVALID_AMOUNT')
         else:
             self._users[user_id] = amount
+            try:
+                create_user_in_db(user_id, amount)
+            except Exception:
+                pass
             return self._success_status_msg(self._users[user_id])
 
     def get_balance(self, user_id):
@@ -94,7 +100,12 @@ class PaymentEngine:
             return self._failed_status_msg('INSUFFICIENT_FUNDS')
         else:
             self._users[user_id] -= amount
-            transaction_id = self._record_transaction(user_id, amount, 'PAYMENT', None)
+            transaction = self._record_transaction(user_id, amount, 'PAYMENT', None)
+            try:
+                insert_transaction_in_db(transaction)
+            except Exception:
+                pass
+            transaction_id = transaction['txn_id']
             return self._success_status_msg(self._users[user_id], transaction_id)
 
     def refund_payment(self, user_id: str, amount: float | str | int, payment_txn_id: str):
@@ -110,5 +121,9 @@ class PaymentEngine:
             return self._failed_status_msg('PAYMENT_REFUND_COMPLETED')
         else:
             self._users[user_id] += amount
-            self._record_transaction(user_id, amount, 'REFUND', payment_txn_id)
+            transaction = self._record_transaction(user_id, amount, 'REFUND', payment_txn_id)
+            try:
+                insert_transaction_in_db(transaction)
+            except Exception:
+                pass
             return self._success_status_msg(self._users[user_id])

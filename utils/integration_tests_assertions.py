@@ -46,7 +46,6 @@ def assert_successful_refund_response(server_client, refund_json, net_balance, u
     refund_data = refund_response.get_json()
     assert refund_data['status'] == 'SUCCESS'
     assert refund_data['balance'] == pytest.approx(net_balance)
-    print(refund_data['balance'],pytest.approx(net_balance))
     assert_balance(server_client, net_balance, user_id)
 
 
