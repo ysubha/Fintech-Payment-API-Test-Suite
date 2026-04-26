@@ -1,0 +1,7 @@
+properties.ini
+properties.ini.example should NOT be here — that one gets committed
+__pycache__/
+.pytest_cache/
+allure-results/
+*.pyc
+.env/
