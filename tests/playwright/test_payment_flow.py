@@ -1,12 +1,15 @@
 import json
-import random
-
+import allure
 import pytest
 from playwright.sync_api import sync_playwright
 
 from tests.constants import DEFAULT_INITIAL_BALANCE
 from utils.helper import get_properties
 
+
+@allure.feature('E2E Test')
+@allure.story('End-to-End Validation')
+@allure.severity(allure.severity_level.CRITICAL)
 @pytest.mark.e2e
 def test_e2e_payment_flow(fake):
     with sync_playwright() as playwright:

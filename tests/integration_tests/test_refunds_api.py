@@ -1,3 +1,4 @@
+import allure
 import pytest
 
 from utils.integration_tests_assertions import assert_user_creation_success, assert_successful_payment_response, \
@@ -9,6 +10,9 @@ REFUND_AMOUNT = 500.0
 AMOUNT = 200.0
 
 
+@allure.feature('Process Refunds-Integration Tests')
+@allure.story('Successful Refund Process')
+@allure.severity(allure.severity_level.CRITICAL)
 def test_refund_success(server_client, create_user):
     assert_user_creation_success(create_user)
     request_json = {
@@ -20,6 +24,9 @@ def test_refund_success(server_client, create_user):
     assert_successful_refund_response(server_client, request_json, INITIAL_BALANCE, USER_ID)
 
 
+@allure.feature('Process Refunds-Integration Tests')
+@allure.story('Refund Process failure due to missing amount Details')
+@allure.severity(allure.severity_level.NORMAL)
 def test_missing_amount_refund_failure(server_client, create_user):
     assert create_user.status_code == 200
     refund_json = {
@@ -28,6 +35,9 @@ def test_missing_amount_refund_failure(server_client, create_user):
     assert_failed_refund_response(server_client, refund_json, 'INVALID_INPUT', INITIAL_BALANCE, USER_ID)
 
 
+@allure.feature('Process Refunds-Integration Tests')
+@allure.story('Refund Process failure due to missing User ID Details')
+@allure.severity(allure.severity_level.NORMAL)
 def test_missing_user_id_failure(server_client, create_user):
     assert_user_creation_success(create_user)
     refund_json = {
@@ -36,6 +46,9 @@ def test_missing_user_id_failure(server_client, create_user):
     assert_failed_refund_response(server_client, refund_json, 'INVALID_INPUT', INITIAL_BALANCE, USER_ID)
 
 
+@allure.feature('Process Refunds-Integration Tests')
+@allure.story('Refund Process failure due to missing Request body Details')
+@allure.severity(allure.severity_level.NORMAL)
 def test_missing_request_body_failure(server_client, create_user):
     assert create_user.status_code == 200
 
@@ -43,6 +56,9 @@ def test_missing_request_body_failure(server_client, create_user):
     assert refund_response.status_code == 415  # its not returning 400, its giving 415
 
 
+@allure.feature('Process Refunds-Integration Tests')
+@allure.story('Refund Process failure due to Invalid amount Details')
+@allure.severity(allure.severity_level.NORMAL)
 @pytest.mark.parametrize('refund_amount', [0, -250, None, 'abc'])
 def test_invalid_amount_refund_failure(server_client, create_user, refund_amount):
     assert create_user.status_code == 200
@@ -54,6 +70,9 @@ def test_invalid_amount_refund_failure(server_client, create_user, refund_amount
     assert_failed_refund_response(server_client, refund_json, 'INVALID_AMOUNT', INITIAL_BALANCE, USER_ID)
 
 
+@allure.feature('Process Refunds-Integration Tests')
+@allure.story('Refund Process failure due to User not found')
+@allure.severity(allure.severity_level.NORMAL)
 def test_user_not_found_failure(server_client):
     refund_json = {
         'user_id': USER_ID,
@@ -67,6 +86,9 @@ def test_user_not_found_failure(server_client):
     assert refund_data['reason'] == 'USER_NOT_FOUND'
 
 
+@allure.feature('Process Refunds-Integration Tests')
+@allure.story('Successful multiple payment and refund processes')
+@allure.severity(allure.severity_level.CRITICAL)
 def test_payment_refund_mixed_sequence(server_client, create_user):
     assert_user_creation_success(create_user)
     request_json = {
@@ -89,25 +111,3 @@ def test_payment_refund_mixed_sequence(server_client, create_user):
 
     request_json['txn_id'] = transaction_id_3
     assert_successful_refund_response(server_client, request_json, float(INITIAL_BALANCE), USER_ID)
-
-# def test_multiple_refunds_success(server_client, create_user):
-#     assert create_user.status_code == 200
-#     refund_json = {
-#         'user_id': USER_ID,
-#         'amount': REFUND_AMOUNT
-#     }
-#
-#     assert_successful_refund_response(server_client, refund_json, INITIAL_BALANCE + REFUND_AMOUNT, USER_ID)
-#     assert_successful_refund_response(server_client, refund_json, INITIAL_BALANCE + 2 * REFUND_AMOUNT, USER_ID)
-#     assert_successful_refund_response(server_client, refund_json, INITIAL_BALANCE + 3 * REFUND_AMOUNT, USER_ID)
-
-
-# def test_refund_after_payment_restores_balance_success(server_client, create_user):
-#     assert_user_creation_success(create_user)
-#     request_json = {
-#         'user_id': USER_ID,
-#         'amount': AMOUNT
-#     }
-#     transaction_id = assert_successful_payment_response(server_client, request_json, INITIAL_BALANCE - AMOUNT, USER_ID)
-#     request_json['txn_id'] = transaction_id
-#     assert_successful_refund_response(server_client, request_json, INITIAL_BALANCE, USER_ID)

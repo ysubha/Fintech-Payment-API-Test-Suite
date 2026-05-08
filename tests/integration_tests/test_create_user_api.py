@@ -1,17 +1,27 @@
+import allure
 import pytest
 from utils.integration_tests_assertions import assert_user_creation_success, assert_user_creation_failure
 
 
+@allure.feature('User Creation-Integration Tests')
+@allure.story('Successful creation of user')
+@allure.severity(allure.severity_level.CRITICAL)
 def test_create_user_success(server_client, create_user):
     response = create_user
     assert_user_creation_success(response)
 
 
+@allure.feature('User Creation-Integration Tests')
+@allure.story('User creation failure due to missing JSON ')
+@allure.severity(allure.severity_level.NORMAL)
 def test_user_creation_missing_json_failure(server_client):
     response = server_client.post('/users')
     assert response.status_code == 415
 
 
+@allure.feature('User Creation-Integration Tests')
+@allure.story('User creation failure due to Missing User ID ')
+@allure.severity(allure.severity_level.NORMAL)
 def test_user_creation_missing_user_id_failure(server_client):
     user_json = {
         'amount': 1000
@@ -20,6 +30,9 @@ def test_user_creation_missing_user_id_failure(server_client):
     assert_user_creation_failure(response)
 
 
+@allure.feature('User Creation-Integration Tests')
+@allure.story('User creation failure due to Missing Amount details')
+@allure.severity(allure.severity_level.NORMAL)
 def test_user_creation_missing_amount_failure(server_client, fake):
     user_json = {
         'user_id': fake.user_name()
@@ -28,6 +41,9 @@ def test_user_creation_missing_amount_failure(server_client, fake):
     assert_user_creation_failure(response)
 
 
+@allure.feature('User Creation-Integration Tests')
+@allure.story('User creation failure due to Invalid Amount details')
+@allure.severity(allure.severity_level.NORMAL)
 @pytest.mark.parametrize('amount', [-200, None, 'abc'])
 def test_user_creation_invalid_amount_failure(server_client, fake, amount):
     user_json = {
@@ -38,6 +54,9 @@ def test_user_creation_invalid_amount_failure(server_client, fake, amount):
     assert_user_creation_failure(response)
 
 
+@allure.feature('User Creation-Integration Tests')
+@allure.story('User creation failure due to Duplicate User Creation ')
+@allure.severity(allure.severity_level.CRITICAL)
 def test_duplicate_user_creation_failure(server_client, fake):
     user_json = {
         'user_id': fake.user_name(),

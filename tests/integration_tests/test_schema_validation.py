@@ -1,9 +1,13 @@
+import allure
 from jsonschema import validate
 
 from tests.constants import DEFAULT_USER_ID
 from utils.integration_tests_assertions import assert_user_creation_success
 
 
+@allure.feature('Schema Validation-Integration Tests')
+@allure.story('Successful schema structure validation')
+@allure.severity(allure.severity_level.CRITICAL)
 def test_base_success_schema_structure(create_user):
     response = create_user
     success_schema = {
@@ -19,6 +23,9 @@ def test_base_success_schema_structure(create_user):
     validate(instance=response.get_json(), schema=success_schema)
 
 
+@allure.feature('Schema Validation-Integration Tests')
+@allure.story('Successful payment schema structure validation')
+@allure.severity(allure.severity_level.CRITICAL)
 def test_payment_success_schema_structure(create_user, server_client):
     assert_user_creation_success(create_user)
     payment_json = {
@@ -39,6 +46,9 @@ def test_payment_success_schema_structure(create_user, server_client):
     validate(instance=payment_response.get_json(), schema=success_schema)
 
 
+@allure.feature('Schema Validation-Integration Tests')
+@allure.story('Failed schema structure validation')
+@allure.severity(allure.severity_level.CRITICAL)
 def test_failure_schema_structure(server_client):
     response = server_client.post('/payments', json={'amount': 1000})
     failure_schema = {
