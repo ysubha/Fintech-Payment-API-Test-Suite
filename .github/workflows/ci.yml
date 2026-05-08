@@ -52,10 +52,3 @@ jobs:
         with:
           name: allure-report
           path: allure-report/
-
-      - name: Upload Playwright traces and screenshots
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-artifacts
-          path: test-results/Failed but at the end-to-end test, which is one test case. Actually, in the pytest.ini, we had marked that we should not run the end-to-end test since it requires
