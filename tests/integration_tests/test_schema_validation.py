@@ -1,3 +1,5 @@
+import uuid
+
 import allure
 from jsonschema import validate
 
@@ -32,7 +34,9 @@ def test_payment_success_schema_structure(create_user, server_client):
         'user_id': DEFAULT_USER_ID,
         'amount': 500
     }
-    payment_response = server_client.post('/payments', json=payment_json)
+    idempotency_key = str(uuid.uuid4())
+    headers = {'Idempotency-Key': idempotency_key}
+    payment_response = server_client.post('/payments', json=payment_json, headers=headers)
     success_schema = {
         'type': 'object',
         'properties': {
@@ -50,7 +54,9 @@ def test_payment_success_schema_structure(create_user, server_client):
 @allure.story('Failed schema structure validation')
 @allure.severity(allure.severity_level.CRITICAL)
 def test_failure_schema_structure(server_client):
-    response = server_client.post('/payments', json={'amount': 1000})
+    idempotency_key = str(uuid.uuid4())
+    headers = {'Idempotency-Key': idempotency_key}
+    response = server_client.post('/payments', json={'amount': 1000}, headers=headers)
     failure_schema = {
         'type': 'object',
         'properties': {

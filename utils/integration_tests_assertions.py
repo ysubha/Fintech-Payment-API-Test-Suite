@@ -1,3 +1,5 @@
+import uuid
+
 import pytest
 
 
@@ -19,8 +21,10 @@ def assert_balance(server_client, balance, user_id):
     assert balance_json['balance'] == pytest.approx(balance)
 
 
-def assert_successful_payment_response(server_client, payment_json, balance, user_id):
-    payment_response = server_client.post('/payments', json=payment_json)
+def assert_successful_payment_response(server_client, payment_json, balance, user_id, ):
+    idempotency_key = str(uuid.uuid4())
+    headers = {'Idempotency-Key': idempotency_key}
+    payment_response = server_client.post('/payments', json=payment_json, headers=headers)
     assert payment_response.status_code == 200
     payment_response_json = payment_response.get_json()
     assert payment_response_json['status'] == 'SUCCESS'
@@ -31,7 +35,9 @@ def assert_successful_payment_response(server_client, payment_json, balance, use
 
 
 def assert_failed_payment_response(server_client, payment_json, reason, balance, user_id):
-    payment_response = server_client.post('/payments', json=payment_json)
+    idempotency_key = str(uuid.uuid4())
+    headers = {'Idempotency-Key': idempotency_key}
+    payment_response = server_client.post('/payments', json=payment_json, headers=headers)
     assert payment_response.status_code == 400
     payment_response_json = payment_response.get_json()
     assert payment_response_json['status'] == 'FAILED'

@@ -1,4 +1,6 @@
 import json
+import uuid
+
 import allure
 import pytest
 from playwright.sync_api import sync_playwright
@@ -21,7 +23,8 @@ def test_e2e_payment_flow(fake):
             'user_id': user_id,
             'amount': DEFAULT_INITIAL_BALANCE
         }
-        header = {"Content-Type": "application/json"}
+        idempotency_key = str(uuid.uuid4())
+        header = {"Content-Type": "application/json", 'Idempotency-Key': idempotency_key}
         # CreateUser
         response = request.post('/users', data=json.dumps(user), headers=header)
         assert response.status == 200

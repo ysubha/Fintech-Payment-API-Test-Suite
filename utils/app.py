@@ -3,6 +3,7 @@ from services.payment_engine import PaymentEngine
 
 api = Flask(__name__)
 pay_engine = PaymentEngine()
+idempotency_store = {}
 
 if __name__ == '__main__':
     api.run(port=5000, debug=True)
@@ -34,7 +35,13 @@ def process_payment():
             'reason': 'INVALID_INPUT'
         }), 400
     else:
-        response = pay_engine.process_payment(payment_data['user_id'], payment_data['amount'])
+        idempotency_key = request.headers.get('Idempotency-key')
+        if idempotency_key and idempotency_key in idempotency_store:
+            response = idempotency_store[idempotency_key]
+        else:
+            response = pay_engine.process_payment(payment_data['user_id'], payment_data['amount'])
+            if idempotency_key:
+                idempotency_store[idempotency_key] = response
         if response['status'] == 'SUCCESS':
             return jsonify(response), 200
         else:

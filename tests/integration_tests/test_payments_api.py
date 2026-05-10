@@ -1,3 +1,5 @@
+import uuid
+
 import allure
 import pytest
 
@@ -58,7 +60,9 @@ def test_payment_user_not_found_failure(server_client):
         'user_id': USER_ID,
         'amount': 200
     }
-    payment_response = server_client.post('/payments', json=payment_json)
+    idempotency_key = str(uuid.uuid4())
+    headers = {'Idempotency-Key': idempotency_key}
+    payment_response = server_client.post('/payments', json=payment_json, headers=headers)
     assert payment_response.status_code == 400
     payment_response_json = payment_response.get_json()
     assert payment_response_json['status'] == 'FAILED'
