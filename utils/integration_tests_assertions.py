@@ -21,7 +21,7 @@ def assert_balance(server_client, balance, user_id):
     assert balance_json['balance'] == pytest.approx(balance)
 
 
-def assert_successful_payment_response(server_client, payment_json, balance, user_id, ):
+def assert_successful_payment_response(server_client, payment_json, balance, user_id ):
     idempotency_key = str(uuid.uuid4())
     headers = {'Idempotency-Key': idempotency_key}
     payment_response = server_client.post('/payments', json=payment_json, headers=headers)
