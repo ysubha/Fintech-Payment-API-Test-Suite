@@ -141,17 +141,17 @@ Response: { "status": "SUCCESS", "balance": 1000.0 }
         /\
        /E2E\        1 test  — Playwright API context (requires live server)
       /──────\
-     /Integ-  \     ~45 tests — Flask test_client, real engine, schema validation,
+     /Integ-  \     35 tests — Flask test_client, real engine, schema validation,
     / ration   \               idempotency, parametrized scenarios
    /────────────\
-  /    Unit      \  ~15 tests — PaymentEngine direct, unittest.mock, edge cases
+  /    Unit      \  25 tests — PaymentEngine direct, unittest.mock, edge cases
  /________________\
 ```
 
 | Layer | Count | Location | Fixture |
 |-------|-------|----------|---------|
-| Unit | ~15 | `tests/unit/` | `pay_engine` |
-| Integration | ~45 | `tests/integration/` | `server_client` |
+| Unit | 25 | `tests/unit/` | `pay_engine` |
+| Integration | 35 | `tests/integration/` | `server_client` |
 | E2E | 1 | `tests/playwright/` | Live server required |
 
 ---
