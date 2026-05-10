@@ -151,7 +151,7 @@ Response: { "status": "SUCCESS", "balance": 1000.0 }
 | Layer | Count | Location | Fixture |
 |-------|-------|----------|---------|
 | Unit | ~15 | `tests/unit/` | `pay_engine` |
-| Integration | ~30 | `tests/integration/` | `server_client` |
+| Integration | ~45 | `tests/integration/` | `server_client` |
 | E2E | 1 | `tests/playwright/` | Live server required |
 
 ---
