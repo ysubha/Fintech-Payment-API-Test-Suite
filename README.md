@@ -1,6 +1,6 @@
 # Mini Fintech Payment & Order System
 
-A production-style REST API test-automation framework built to demonstrate SDET-2 level skills — REST API coverage, schema/contract validation, idempotency testing, `unittest.mock` DB isolation, Allure reporting.
+A production-style REST API test-automation framework built to demonstrate SDET-2 level skills - REST API coverage, schema/contract validation, idempotency testing, `unittest.mock` DB isolation, Allure reporting.
 
 ---
 
