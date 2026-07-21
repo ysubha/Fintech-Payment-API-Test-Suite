@@ -29,7 +29,7 @@ A production-style REST API test-automation framework built to demonstrate SDET-
 
 This repo is a deliberately small **system under test** (a Flask payment API) wrapped in a **deliberately thorough test suite**. The API itself is not the point — it is a realistic target that lets the test framework exercise the things a payment/fintech backend actually cares about: money not being lost, no double-charges, contract stability, and correct behaviour when the database is down.
 
-Read it as: *"a compact but honest demonstration of how I design an API test framework end to end — from unit-level business logic, through integration against a real HTTP client, up to a single E2E happy path, all running in CI."*
+Read it as : *"a compact but honest demonstration of how I design an API test framework end to end — from unit-level business logic, through integration against a real HTTP client, up to a single E2E happy path, all running in CI."*
 
 ---
 
