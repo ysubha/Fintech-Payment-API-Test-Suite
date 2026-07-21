@@ -2,8 +2,6 @@
 
 A production-style REST API test-automation framework built to demonstrate SDET-2 level skills — REST API coverage, schema/contract validation, idempotency testing, `unittest.mock` DB isolation, Allure reporting.
 
-[![CI](https://github.com/ysubha/mini-fintech-system/actions/workflows/tests.yml/badge.svg)](https://github.com/ysubha/mini-fintech-system/actions/workflows/tests.yml)
-
 ---
 
 ## Table of Contents
