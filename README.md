@@ -76,7 +76,7 @@ A Flask-based payment system supporting user creation, payment processing, and r
 mini-fintech-system/
 ├── services/
 │   ├── payment_engine.py      # Core business logic + in-memory state (source of truth)
-│   └── db.py                  # MySQL persistence layer (optional; INSERT/DELETE only)
+│   └── db.py                  # SQL persistence layer (optional; INSERT/DELETE only)
 ├── utils/
 │   ├── app.py                 # Flask app: routes, request parsing, idempotency store
 │   ├── helper.py              # get_properties() — reads config from properties.ini
